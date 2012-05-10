@@ -1,5 +1,6 @@
 package com.example.listloader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -18,12 +19,11 @@ public class MainActivity extends FragmentActivity {
     }
     
     public void clear(View view) {
-    	getContentResolver().delete(DataContract.RSS_CONTENT_URI, null, null);
-    	getContentResolver().notifyChange(DataContract.RSS_CONTENT_URI, null);
+    	startService(new Intent(DataContract.ACTION_CLEAR));
     }
     
     public void load(View view) {
-    	RssFetcher.tryFetch(getContentResolver());
+    	startService(new Intent(DataContract.ACTION_FETCH));
     }
    
 }

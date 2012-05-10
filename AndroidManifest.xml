@@ -22,7 +22,12 @@
         
         <provider android:name=".MainProvider" android:authorities="com.example.listloader"></provider>
         
-
+		<service android:name=".MainService">
+            <intent-filter>
+                <action android:name="com.example.listloader.action.clear"/>
+                <action android:name="com.example.listloader.action.fetch"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
