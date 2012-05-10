@@ -8,13 +8,13 @@
         android:onClick="clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear" />
+        android:text="@string/clear" />
     
     <Button
         android:onClick="load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Load" />
+        android:text="@string/load" />
     
     <FrameLayout 
        android:id="@+id/fragholder"
