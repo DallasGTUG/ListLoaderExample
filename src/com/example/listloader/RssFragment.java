@@ -1,45 +1,56 @@
 package com.example.listloader;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.CursorAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class RssFragment extends ListFragment implements LoaderCallbacks<Cursor> {
 
-    private SimpleCursorAdapter mAdapter;
+    private CursorAdapter adapter;
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Give some text to display if there is no data.  
+        super.onActivityCreated(savedInstanceState); 
         setEmptyText("No items");
-
-        // Create an empty adapter we will use to display the loaded data.
-        mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2, 
-                null,
-                new String[] { DataContract.COLUMN_TITLE, DataContract.COLUMN_DESCRIPTION },
-                new int[] { android.R.id.text1, android.R.id.text2 }, 
-                0);
-        
-        setListAdapter(mAdapter);
-        
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
+        adapter = new MyAdapter(getActivity(), null, true);
+        setListAdapter(adapter);
         getLoaderManager().initLoader(0, null, this);
     }
+    
+    public class MyAdapter extends CursorAdapter {
+
+		public MyAdapter(Context context, Cursor c, boolean autoRequery) {
+			super(context, c, autoRequery);
+		}
+
+		@Override
+		public void bindView(View view, Context context, Cursor cursor) {
+			TextView tv1 = (TextView) view.getTag(R.id.text1);
+			TextView tv2 = (TextView) view.getTag(R.id.text2);
+			tv1.setText(cursor.getString(1));
+			tv2.setText(cursor.getString(2));
+		}
+
+		@Override
+		public View newView(Context context, Cursor cursor, ViewGroup viewgroup) {
+			LayoutInflater inflater = LayoutInflater.from(context);
+			View view = inflater.inflate(R.layout.item, null);
+			view.setTag(R.id.text1, view.findViewById(R.id.text1));
+			view.setTag(R.id.text2, view.findViewById(R.id.text2));
+			return view;
+		}
+	};
+    
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // This is called when a new Loader needs to be created.  This
-        // sample only has one Loader, so we don't care about the ID.
-
-
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
         return new CursorLoader(
         		getActivity(), 
         		DataContract.RSS_CONTENT_URI,
@@ -50,17 +61,12 @@ public class RssFragment extends ListFragment implements LoaderCallbacks<Cursor>
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
     	data.setNotificationUri(getActivity().getContentResolver(), DataContract.RSS_CONTENT_URI);
-        mAdapter.swapCursor(data);
+    	adapter.swapCursor(data);
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
-        mAdapter.swapCursor(null);
+    	adapter.swapCursor(null);
     }
 
 }
