@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:onClick="clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear" />
+    
+    <Button
+        android:onClick="load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load" />
+    
+    <FrameLayout 
+       android:id="@+id/fragholder"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent" ></FrameLayout>
+    
+</LinearLayout>
